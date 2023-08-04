@@ -13,6 +13,12 @@ class TableController extends Controller
         return response()->json($tables);
     }
 
+    public function detail($id)
+    {
+        $table = Table::findOrFail($id);
+        return response()->json($table);
+    }
+
     public function table_active($id)
     {
         $table = Table::find($id)->reservation()->where('status', 'Process')->with('items')->with('table')->get();
