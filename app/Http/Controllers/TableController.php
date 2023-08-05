@@ -28,7 +28,7 @@ class TableController extends Controller
 
     public function history_by_table($id)
     {
-        $table = Table::find($id)->reservation()->with('items')->with('table')->get();
+        $table = Table::find($id)->reservation()->with('order_items.item')->with('table')->get();
 
         return response()->json($table);
     }

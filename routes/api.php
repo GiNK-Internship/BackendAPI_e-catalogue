@@ -23,7 +23,7 @@ Route::delete('/categories/{id}', [CategoryController::class, 'delete']);
 
 Route::get('/reservations', [ReservationController::class, 'index']);
 Route::get('/tables/{id}/reservations', [ReservationController::class, 'detail']);
-Route::get('/tables/{id}/reservations/{id_res}', [ReservationController::class, 'checkout']);
+Route::post('/tables/reservations/{id}', [ReservationController::class, 'checkout']);
 Route::get('/reservations/{id}/items', [ReservationController::class, 'detail_item_reservations']);
 Route::get('/tables/{id}/reservations/register', [ReservationController::class, 'registration']);
 Route::post('/tables/{id}/reservations', [ReservationController::class, 'generate']);

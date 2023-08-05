@@ -83,17 +83,19 @@ class ReservationController extends Controller
         }
     }
 
-    public function checkout($id, $id_res)
+    public function checkout($id, Request $request)
     {
-        $table = Table::find($id);
+        $id_table = $request->table_id;
+
+        $table = Table::find($id_table);
         $table->status = 'Kosong';
         $table->save();
 
-        $reservation = Reservation::find($id_res);
+        $reservation = Reservation::find($id);
         $reservation->status = 'Finish';
         $reservation->save();
 
-        $table = Table::find($id)->reservation()->with('items')->with('table')->orderBy('created_at', 'desc')->where('status', 'Finish')->first();
+        $table = Table::find($id_table)->reservation()->with('items')->with('table')->orderBy('created_at', 'desc')->where('status', 'Finish')->first();
 
         return response()->json($table);
     }
