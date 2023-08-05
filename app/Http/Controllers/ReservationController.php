@@ -16,7 +16,7 @@ class ReservationController extends Controller
 
     public function detail($id)
     {
-        $table = Table::find($id)->reservation()->with('items')->with('table')->orderBy('created_at', 'desc')->where('status', 'Process')->first();
+        $table = Table::find($id)->reservation()->with('order_items')->with('table')->orderBy('created_at', 'desc')->where('status', 'Process')->first();
         if ($table == null) {
             $table = Table::find($id);
             $data = [
@@ -40,7 +40,7 @@ class ReservationController extends Controller
 
     public function detail_item_reservations($id)
     {
-        $reservation = Reservation::with('items')->with('table')->find($id);
+        $reservation = Reservation::with('order_items')->with('table')->find($id);
         return response()->json($reservation);
     }
 
@@ -58,7 +58,13 @@ class ReservationController extends Controller
         $request['pin'] = $generate_pin;
         $request['status'] = "Process";
 
+        $table = Table::find($id);
+        $status = "Berisi";
+
         $reservation = Reservation::create($request->all());
+
+        $table->status = $status;
+        $table->save();
 
         return $reservation;
     }
@@ -95,7 +101,7 @@ class ReservationController extends Controller
         $reservation->status = 'Finish';
         $reservation->save();
 
-        $table = Table::find($id_table)->reservation()->with('items')->with('table')->orderBy('created_at', 'desc')->where('status', 'Finish')->first();
+        $table = Table::find($id_table)->reservation()->with('order_items')->with('table')->orderBy('created_at', 'desc')->where('status', 'Finish')->first();
 
         return response()->json($table);
     }

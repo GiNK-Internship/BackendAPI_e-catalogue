@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\TableController;
@@ -42,3 +43,15 @@ Route::get('/tables', [TableController::class, 'index']);
 Route::get('/tables/{id}/detail', [TableController::class, 'detail']);
 Route::get('/tables/{id}/', [TableController::class, 'history_by_table']);
 Route::get('/tables/{id}/items', [TableController::class, 'table_active']);
+
+Route::get('image/{filename}', function ($filename) {
+    $path = 'image/' . $filename;
+    if (Storage::exists($path)) {
+        $file = Storage::get($path);
+        $type = Storage::mimeType($path);
+
+        return response($file)->header('Content-Type', $type);
+    }
+
+    return response()->json(['error' => 'Image not found'], 404);
+});

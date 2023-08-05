@@ -30,6 +30,15 @@ class TableController extends Controller
     {
         $table = Table::find($id)->reservation()->with('order_items.item')->with('table')->get();
 
+        foreach ($table as $reservation) {
+            foreach ($reservation->order_items as $orderItem) {
+                $item = $orderItem->item;
+                if (!empty($item->foto)) {
+                    $item->foto = url('api/image/' . $item->foto); // Sesuaikan dengan path gambar Anda
+                }
+            }
+        }
+
         return response()->json($table);
     }
 

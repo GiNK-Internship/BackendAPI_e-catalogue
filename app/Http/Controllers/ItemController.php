@@ -13,6 +13,12 @@ class ItemController extends Controller
     {
         $items = Item::with('categories')->get();
 
+        foreach ($items as $item) {
+            if (!empty($item->foto)) {
+                $item->foto = asset('api/image/' . $item->foto);
+            }
+        }
+
         return response()->json($items);
     }
 
@@ -36,6 +42,10 @@ class ItemController extends Controller
     public function detail($id)
     {
         $item = Item::findOrFail($id);
+
+        if (!empty($item->foto)) {
+            $item->foto = asset('api/image/' . $item->foto);
+        }
 
         return response()->json($item);
     }
