@@ -9,6 +9,7 @@ use App\Http\Controllers\TableController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\AuthenticationController;
+use App\Http\Controllers\UserController;
 
 Route::get('/items', [ItemController::class, 'index']);
 Route::post('/items', [ItemController::class, 'store']);
@@ -40,9 +41,18 @@ Route::patch('/order_items/{id}', [OrderController::class, 'update']);
 Route::post('/order/store', [OrderController::class, 'store']);
 
 Route::get('/tables', [TableController::class, 'index']);
+Route::post('/tables', [TableController::class, 'store']);
+Route::patch('/tables/{id}', [TableController::class, 'update']);
+Route::delete('/tables/{id}', [TableController::class, 'delete']);
 Route::get('/tables/{id}/detail', [TableController::class, 'detail']);
 Route::get('/tables/{id}/', [TableController::class, 'history_by_table']);
 Route::get('/tables/{id}/items', [TableController::class, 'table_active']);
+
+Route::get('/users', [UserController::class, 'index']);
+Route::post('/users', [UserController::class, 'store']);
+Route::get('/users/{id}', [UserController::class, 'detail']);
+Route::patch('/users/{id}', [UserController::class, 'update']);
+Route::delete('/users/{id}', [UserController::class, 'delete']);
 
 Route::get('image/{filename}', function ($filename) {
     $path = 'image/' . $filename;

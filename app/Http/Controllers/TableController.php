@@ -13,6 +13,30 @@ class TableController extends Controller
         return response()->json($tables);
     }
 
+    public function store(Request $request)
+    {
+        $request['status'] = 'Kosong';
+        $table = Table::create($request->all());
+
+        return response()->json($table);
+    }
+
+    public function update(Request $request, $id)
+    {
+        $table = Table::findOrFail($id);
+
+        $table->update($request->all());
+
+        return response()->json($table);
+    }
+
+    public function delete($id)
+    {
+        $table = Table::findOrFail($id)->delete();
+
+        return response()->json($table);
+    }
+
     public function detail($id)
     {
         $table = Table::findOrFail($id);
