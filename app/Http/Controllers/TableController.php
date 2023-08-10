@@ -45,7 +45,16 @@ class TableController extends Controller
 
     public function table_active($id)
     {
-        $table = Table::find($id)->reservation()->where('status', 'Process')->with('items')->with('table')->get();
+        $table = Table::find($id)->reservation()->where('status', 'Process')->with('order_items.item')->with('table')->get();
+
+        foreach ($table as $reservation) {
+            foreach ($reservation->order_items as $orderItem) {
+                $item = $orderItem->item;
+                if (!empty($item->foto)) {
+                    $item->foto = url('api/image/' . basename($item->foto));
+                }
+            }
+        }
 
         return response()->json($table);
     }
@@ -58,7 +67,7 @@ class TableController extends Controller
             foreach ($reservation->order_items as $orderItem) {
                 $item = $orderItem->item;
                 if (!empty($item->foto)) {
-                    $item->foto = url('api/image/' . $item->foto); // Sesuaikan dengan path gambar Anda
+                    $item->foto = url('api/image/' . basename($item->foto));
                 }
             }
         }

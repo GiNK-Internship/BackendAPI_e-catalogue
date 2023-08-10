@@ -34,14 +34,18 @@ class ItemController extends Controller
         }
 
         $request['foto'] = $image;
-        $item = Item::create($request->all());
+        $item = Item::create($request->except('category_ids'));
+
+        if ($request->category_ids) {
+            $item->categories()->attach($request->category_ids);
+        }
 
         return response()->json($item);
     }
 
     public function detail($id)
     {
-        $item = Item::findOrFail($id);
+        $item = Item::with('categories')->findOrFail($id);
 
         if (!empty($item->foto)) {
             $item->foto = asset('api/image/' . $item->foto);
@@ -54,7 +58,7 @@ class ItemController extends Controller
     {
         $item = Item::findOrFail($id);
 
-        $item->update($request->except('foto'));
+        $item->update($request->except('foto', 'category_ids'));
 
         if ($request->hasFile('foto')) {
             Storage::delete('images' . $item->foto);
@@ -67,8 +71,13 @@ class ItemController extends Controller
             $item->save();
         }
 
+        if ($request->has('category_ids')) {
+            $item->categories()->sync($request->category_ids);
+        }
+
         return response()->json($item);
     }
+
 
     public function delete($id)
     {
