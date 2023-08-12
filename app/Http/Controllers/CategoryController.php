@@ -20,4 +20,27 @@ class CategoryController extends Controller
 
         return response()->json($category);
     }
+
+    public function store(Request $request)
+    {
+        $category = Category::create($request->all());
+
+        return response()->json($category);
+    }
+
+    public function update(Request $request, $id)
+    {
+        $category = Category::findOrFail($id);
+
+        $category->update($request->all());
+
+        return response()->json($category);
+    }
+
+    public function delete($id)
+    {
+        $item = Category::findOrFail($id)->delete();
+
+        return response()->json($item);
+    }
 }

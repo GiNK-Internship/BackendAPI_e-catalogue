@@ -2,8 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Reservation extends Model
 {
@@ -18,7 +19,7 @@ class Reservation extends Model
         return $this->belongsTo(Table::class);
     }
 
-    public function items()
+    public function order_items()
     {
         return $this->hasManyThrough(OrderItem::class, Order::class);
     }
